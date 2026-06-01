@@ -276,6 +276,8 @@ def setup_schema():
 
         full_name VARCHAR(255) NOT NULL,
 
+        username VARCHAR(100) UNIQUE,
+
         email VARCHAR(255) UNIQUE NOT NULL,
 
         phone_number VARCHAR(20) UNIQUE,
@@ -990,6 +992,13 @@ ON medical_oltp.rx_dispensing(batch_id);
     FOREIGN KEY (sales_bill_id)
     REFERENCES medical_oltp.sales_bills(bill_id)
 );""")
+    
+    cur.execute("""
+    ALTER TABLE medical_oltp.users
+    ADD COLUMN IF NOT EXISTS firebase_uid TEXT,
+    ADD COLUMN IF NOT EXISTS fcm_token TEXT,
+    ADD COLUMN IF NOT EXISTS username VARCHAR(255) UNIQUE;
+    """)
 
     conn.commit()
 
